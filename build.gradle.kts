@@ -9,26 +9,34 @@ plugins {
 	id("org.jlleitschuh.gradle.ktlint") version "10.0.0"
 }
 
-group = "me.slehrbaum"
+group = "de.lehrbaum"
 version = "1.0-SNAPSHOT"
 
 application {
-	mainClassName = "de.lehrbaum.bot.translate.MainKt"
+	mainClass.set("de.lehrbaum.bot.translate.MainKt")
 }
 
 repositories {
 	mavenCentral()
 	jcenter()
+	maven(url = "https://jitpack.io")
 }
 
 dependencies {
 	implementation("com.sksamuel.hoplite:hoplite-core:+")
+	implementation("com.sksamuel.hoplite:hoplite-yaml:+")
+
+	implementation("io.ktor:ktor-client-core:+")
+	implementation("io.ktor:ktor-client-cio:+")
+
 	implementation("org.koin:koin-core:$koinVersion")
 
+	implementation("com.github.kotlin-telegram-bot:kotlin-telegram-bot:+")
+
 	testImplementation("org.koin:koin-test:$koinVersion")
+
 	testImplementation(kotlin("test-junit5"))
 	testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 }
 

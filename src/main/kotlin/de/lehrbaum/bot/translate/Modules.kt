@@ -10,10 +10,16 @@ internal fun setupKoin() {
 		// use Koin logger
 		printLogger()
 		// declare modules
-		modules(configModule)
+		modules(configModule, applicationModule)
 	}
 }
 
-internal val configModule = module {
+private val applicationModule = module {
+	single { TranslateBotLogic(get(), get()) }
+	single { FakeTranslationService(get()) }
+	single { TelegramBotFactory(get()) }
+}
+
+private val configModule = module {
 	single { ConfigLoader().loadConfigOrThrow<Secrets>("/secrets.yaml") }
 }

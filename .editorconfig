@@ -2,3 +2,4 @@ root = true
 
 [*.{kt,kts}]
 indent_style = tab
+# Intellij continuation indent problem: https://youtrack.jetbrains.com/issue/KT-41072
