@@ -1,4 +1,4 @@
-package de.lehrbaum.bot.translate
+package de.lehrbaum.bot.translate.telegram
 
 import com.github.kotlintelegrambot.Bot
 import com.github.kotlintelegrambot.bot

@@ -11,7 +11,7 @@ object Commands {
 
 	val STOP_TRANSLATING: BotCommand = BotCommand("stop", "")
 
-	val ADD_TRANSLATION_RULE: BotCommand = BotCommand("addRule", "Rule form is like en-ru")
+	val ADD_TRANSLATION_RULE: BotCommand = BotCommand("addRule", "Rule form is like en ru")
 
 	val REMOVE_TRANSLATION_RULE: BotCommand = BotCommand("removeRule", "Argument is first part of rule like en")
 

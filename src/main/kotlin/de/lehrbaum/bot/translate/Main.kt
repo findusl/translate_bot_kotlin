@@ -1,5 +1,12 @@
 package de.lehrbaum.bot.translate
 
+import de.lehrbaum.bot.translate.config.Secrets
+import de.lehrbaum.bot.translate.config.Telegram
+import de.lehrbaum.bot.translate.config.Yandex
+import de.lehrbaum.bot.translate.service.translation.YandexTokenService
+import de.lehrbaum.bot.translate.service.translation.YandexTranslationService
+import de.lehrbaum.bot.translate.telegram.TranslateBotLogic
+import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
