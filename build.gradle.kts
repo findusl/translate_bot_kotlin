@@ -11,7 +11,7 @@ plugins {
 	application
 	idea
 	kotlin("jvm") version "1.4.30"
-	kotlin("plugin.serialization") version "1.4.30"
+	// kotlin("plugin.serialization") version "1.4.30"
 	// id("org.jlleitschuh.gradle.ktlint") version "10.0.0" // still some Problems with tab indent
 }
 
@@ -68,10 +68,22 @@ tasks.withType<KotlinCompile>() {
 
 java.targetCompatibility = JavaVersion.VERSION_15
 
-val e2eTest: SourceSet by sourceSets.creating
+val main: SourceSet by sourceSets.named("main")
 
-e2eTest.apply {
+val e2eTest: SourceSet by sourceSets.creating {
+	kotlin {
+		compileClasspath += main.output + configurations.testRuntimeClasspath
+		runtimeClasspath += output + compileClasspath
+	}
 	java.srcDir("src/e2eTest/kotlin")
-	idea.module.testSourceDirs.addAll(java.srcDirs)
 	resources.srcDir("src/main/resources")
+	idea.module.sourceDirs.removeAll(java.srcDirs)
+	idea.module.testSourceDirs.addAll(java.srcDirs)
+}
+
+val runE2eTests by tasks.creating(Test::class) {
+	description = "Runs the E2E tests"
+	group = "verification"
+	testClassesDirs = e2eTest.output.classesDirs
+	classpath = e2eTest.runtimeClasspath
 }
