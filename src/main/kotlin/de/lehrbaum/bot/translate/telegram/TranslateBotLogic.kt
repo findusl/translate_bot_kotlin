@@ -44,7 +44,7 @@ class TranslateBotLogic(
 
 	private suspend fun CommandHandlerEnvironment.handleGetLanguagesCommand() {
 		val languagesHumanReadable = translationService.getLanguages()
-			.joinToString { "${it.code}: ${it.name},\n" }
+			.joinToString(separator = "\n,") { "${it.code}: ${it.name}" }
 		replyToMessage("Possible languages are: $languagesHumanReadable")
 	}
 
@@ -54,7 +54,7 @@ class TranslateBotLogic(
 		if (chatSettings.translationRules.isEmpty()) {
 			replyToMessage(
 				"There are no active translation rules. Translating not activated. " +
-					"Use ${Commands.ADD_TRANSLATION_RULE.command} to add translation rules."
+						"Use ${Commands.ADD_TRANSLATION_RULE.command} to add translation rules."
 			)
 			return
 		}
@@ -72,7 +72,7 @@ class TranslateBotLogic(
 		} else {
 			replyToMessage(
 				"No more messages in this chat are automatically translated. " +
-					"Translation for this chat was never active."
+						"Translation for this chat was never active."
 			)
 		}
 	}
@@ -99,8 +99,8 @@ class TranslateBotLogic(
 		if (chatSettings.translationRules.containsKey(source)) {
 			replyToMessage(
 				"There is already a translation rule for $source to ${chatSettings.translationRules[source]}. " +
-					"There can only be one rule for a given source language. " +
-					"You can delete the existing rule with /${Commands.ADD_TRANSLATION_RULE.command} $source"
+						"There can only be one rule for a given source language. " +
+						"You can delete the existing rule with /${Commands.ADD_TRANSLATION_RULE.command} $source"
 			)
 			return
 		}

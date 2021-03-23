@@ -48,7 +48,9 @@ dependencies {
 
 	implementation("org.koin:koin-core:$koinVersion")
 
-	implementation("com.github.kotlin-telegram-bot:kotlin-telegram-bot:+")
+	implementation("com.github.kotlin-telegram-bot:kotlin-telegram-bot:+") {
+		exclude(module = "webhook")
+	}
 
 	// test implementations:
 	testImplementation("org.koin:koin-test:$koinVersion")
