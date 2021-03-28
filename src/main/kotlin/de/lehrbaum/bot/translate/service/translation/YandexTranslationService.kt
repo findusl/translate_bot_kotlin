@@ -27,7 +27,12 @@ class YandexTranslationService(private val httpClient: HttpClient, private val y
 			url("https://translate.api.cloud.yandex.net/translate/v2/languages")
 			header(HttpHeaders.Authorization, "Bearer $iamToken")
 		}
-		return response.languages
+
+		return response.languages.filter {
+			it.name != null
+		}.map {
+			Language(it.code, it.name!!)
+		}
 	}
 
 	override suspend fun translate(text: String, sourceLang: String, targetLang: String): String {
@@ -47,7 +52,8 @@ class YandexTranslationService(private val httpClient: HttpClient, private val y
 private data class DetectLanguageRequest(val text: String, val languageCodeHints: Collection<String>)
 private data class DetectLanguageResponse(val languageCode: String)
 
-private data class GetLanguagesResponse(val languages: Collection<Language>)
+private data class GetLanguagesResponse(val languages: Collection<GetLanguagesLanguageResponse>)
+private data class GetLanguagesLanguageResponse(val code: String, val name: String?)
 
 private data class TranslateTextRequest(
 	val sourceLanguageCode: String,

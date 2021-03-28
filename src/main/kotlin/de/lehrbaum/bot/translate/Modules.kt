@@ -12,7 +12,7 @@ import io.ktor.client.features.json.*
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
-internal fun setupKoin() {
+fun setupKoin() {
 	startKoin {
 		// use Koin logger
 		printLogger()
@@ -23,7 +23,6 @@ internal fun setupKoin() {
 
 private val applicationModule = module {
 	single { TranslateBotLogic(get(), get()) }
-	// single<TranslationService> { FakeTranslationService() }
 	single<TranslationService> { YandexTranslationService(get(), get()) }
 	single { YandexTokenService(get(), get()) }
 	single { setupKtorHttpClient() }

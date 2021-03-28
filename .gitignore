@@ -1,4 +1,5 @@
 /src/main/resources/secrets.yaml
+.idea/sonarlint/
 
 # Default kotlin gradle:
 .DS_Store

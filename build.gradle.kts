@@ -55,17 +55,11 @@ dependencies {
 	// test implementations:
 	testImplementation("org.koin:koin-test:$koinVersion")
 
+	implementation("com.natpryce:hamkrest:1.8.0.1")
+
 	testImplementation(kotlin("test-junit5"))
 	testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
-}
-
-tasks.withType<Test> {
-	useJUnitPlatform()
-}
-
-tasks.withType<KotlinCompile>() {
-	kotlinOptions.jvmTarget = "13"
 }
 
 java.targetCompatibility = JavaVersion.VERSION_15
@@ -88,4 +82,12 @@ val runE2eTests by tasks.creating(Test::class) {
 	group = "verification"
 	testClassesDirs = e2eTest.output.classesDirs
 	classpath = e2eTest.runtimeClasspath
+}
+
+tasks.withType<Test> {
+	useJUnitPlatform()
+}
+
+tasks.withType<KotlinCompile>() {
+	kotlinOptions.jvmTarget = "13"
 }

@@ -8,9 +8,9 @@ class FakeTranslationService : TranslationService {
 
 	override suspend fun getLanguages(): Collection<Language> {
 		return listOf(
-			Language("en", "English"),
-			Language("de", "German"),
-			Language("fr", "French")
+            Language("en", "English"),
+            Language("de", "German"),
+            Language("fr", "French")
 		)
 	}
 
