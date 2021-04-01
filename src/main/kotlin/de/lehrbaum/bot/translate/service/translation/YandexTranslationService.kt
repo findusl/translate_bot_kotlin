@@ -3,6 +3,7 @@ package de.lehrbaum.bot.translate.service.translation
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import kotlinx.serialization.Serializable
 
 
 class YandexTranslationService(private val httpClient: HttpClient, private val yandexTokenService: YandexTokenService) :
@@ -40,7 +41,7 @@ class YandexTranslationService(private val httpClient: HttpClient, private val y
 		val body = TranslateTextRequest(sourceLang, targetLang, listOf(text))
 
 		val response: TranslateTextResponse = httpClient.post {
-			url("https://translate.api.cloud.yandex.net/translate/v2/languages")
+			url("https://translate.api.cloud.yandex.net/translate/v2/translate")
 			header(HttpHeaders.Authorization, "Bearer $iamToken")
 			contentType(ContentType.Application.Json)
 			this.body = body
@@ -49,12 +50,18 @@ class YandexTranslationService(private val httpClient: HttpClient, private val y
 	}
 }
 
+@Serializable
 private data class DetectLanguageRequest(val text: String, val languageCodeHints: Collection<String>)
+@Serializable
 private data class DetectLanguageResponse(val languageCode: String)
 
-private data class GetLanguagesResponse(val languages: Collection<GetLanguagesLanguageResponse>)
-private data class GetLanguagesLanguageResponse(val code: String, val name: String?)
+@Serializable
+private data class GetLanguagesResponse(val languages: Collection<Language>) {
+	@Serializable
+	data class Language(val code: String, val name: String? = null)
+}
 
+@Serializable
 private data class TranslateTextRequest(
 	val sourceLanguageCode: String,
 	val targetLanguageCode: String,
@@ -62,6 +69,8 @@ private data class TranslateTextRequest(
 	val format: String = "PLAIN_TEXT"
 )
 
+@Serializable
 private data class TranslateTextResponse(val translations: Collection<Translation>) {
+	@Serializable
 	data class Translation(val text: String)
 }

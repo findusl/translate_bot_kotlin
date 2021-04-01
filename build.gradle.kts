@@ -11,7 +11,7 @@ plugins {
 	application
 	idea
 	kotlin("jvm") version "1.4.30"
-	// kotlin("plugin.serialization") version "1.4.30"
+	kotlin("plugin.serialization") version "1.4.30"
 	// id("org.jlleitschuh.gradle.ktlint") version "10.0.0" // still some Problems with tab indent
 }
 
@@ -36,7 +36,7 @@ dependencies {
 
 	implementation("io.jsonwebtoken:jjwt-api:$jsonwebtokenVersion")
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:$jsonwebtokenVersion")
-	runtimeOnly("io.jsonwebtoken:jjwt-gson:$jsonwebtokenVersion") // or 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+	runtimeOnly("io.jsonwebtoken:jjwt-gson:$jsonwebtokenVersion")
 	// Needed for RSASSA-PSS (PS256, PS384, PS512) algorithms:
 	runtimeOnly("org.bouncycastle:bcprov-jdk15on:+")
 
@@ -44,7 +44,12 @@ dependencies {
 	//  then use kotlinx serialization to prevent problems with kotlin specific features
 	implementation("io.ktor:ktor-client-core:$ktorVersion")
 	implementation("io.ktor:ktor-client-cio:$ktorVersion")
-	implementation("io.ktor:ktor-client-gson:$ktorVersion")
+	implementation("io.ktor:ktor-client-serialization:$ktorVersion")
+	implementation("io.ktor:ktor-client-logging:$ktorVersion")
+
+	implementation("ch.qos.logback:logback-classic:1.2.3")
+
+	implementation("io.github.microutils:kotlin-logging-jvm:2.0.6")
 
 	implementation("org.koin:koin-core:$koinVersion")
 
@@ -55,7 +60,7 @@ dependencies {
 	// test implementations:
 	testImplementation("org.koin:koin-test:$koinVersion")
 
-	implementation("com.natpryce:hamkrest:1.8.0.1")
+	testImplementation("com.natpryce:hamkrest:1.8.0.1")
 
 	testImplementation(kotlin("test-junit5"))
 	testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")

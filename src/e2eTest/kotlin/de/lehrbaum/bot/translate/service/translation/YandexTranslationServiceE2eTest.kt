@@ -20,7 +20,7 @@ private val languageNotEmpty: Matcher<Language> = has(Language::code, !isBlank) 
  * This test does something I learned not to do. It tests the 3rd party consumed service for correctness.
  * I anyway wrote the test because I want to easily react to any problems with the API of the consumed service.
  */
-class YandexTranslationServiceTest : AutoCloseKoinTest() {
+class YandexTranslationServiceE2eTest : KoinTest {
 
 	@JvmField
 	@RegisterExtension

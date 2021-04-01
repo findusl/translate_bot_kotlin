@@ -1,4 +1,5 @@
 /src/main/resources/secrets.yaml
+# I don't want any sonar lint in the project
 .idea/sonarlint/
 
 # Default kotlin gradle:

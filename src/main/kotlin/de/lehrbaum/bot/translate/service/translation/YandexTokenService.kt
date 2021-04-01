@@ -7,10 +7,14 @@ import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.http.ContentType.*
+import kotlinx.serialization.Serializable
+import mu.KotlinLogging
 import java.security.KeyFactory
 import java.security.PrivateKey
 import java.security.spec.PKCS8EncodedKeySpec
 import java.util.*
+
+private val logger = KotlinLogging.logger {}
 
 class YandexTokenService(private val httpClient: HttpClient, private val secrets: Secrets) {
 
@@ -29,7 +33,7 @@ class YandexTokenService(private val httpClient: HttpClient, private val secrets
 			contentType(Application.Json)
 			body = BearerTokenRequest(jwt)
 		}
-		println("Got iamToken ${response.iamToken}")
+		logger.info { "Got iamToken ${response.iamToken}" }
 		return response.iamToken
 	}
 
@@ -56,7 +60,9 @@ class YandexTokenService(private val httpClient: HttpClient, private val secrets
 	}
 }
 
+@Serializable
 private data class BearerTokenRequest(val jwt: String)
 
+@Serializable
 private data class BearerTokenResponse(val iamToken: String, val expiresAt: String)
 // TODO see if expiresAt can be autoparsed to date
