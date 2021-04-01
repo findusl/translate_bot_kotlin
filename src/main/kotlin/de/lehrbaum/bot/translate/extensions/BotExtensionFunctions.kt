@@ -1,4 +1,4 @@
-package de.lehrbaum.bot.translate
+package de.lehrbaum.bot.translate.extensions
 
 import com.github.kotlintelegrambot.dispatcher.Dispatcher
 import com.github.kotlintelegrambot.dispatcher.command

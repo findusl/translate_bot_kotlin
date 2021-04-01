@@ -26,6 +26,8 @@ class YandexTokenService(private val httpClient: HttpClient, private val secrets
 		return KeyFactory.getInstance("RSA").generatePrivate(keySpec)
 	}
 
+	// TODO cache token for duration
+
 	suspend fun requestIAMToken(): String {
 		val jwt = generateIAMTokenRequestJWT()
 		val response: BearerTokenResponse = httpClient.post {
@@ -65,4 +67,4 @@ private data class BearerTokenRequest(val jwt: String)
 
 @Serializable
 private data class BearerTokenResponse(val iamToken: String, val expiresAt: String)
-// TODO see if expiresAt can be autoparsed to date
+// TODO see if expiresAt can be automatically parsed to date

@@ -51,7 +51,10 @@ class YandexTranslationService(private val httpClient: HttpClient, private val y
 }
 
 @Serializable
-private data class DetectLanguageRequest(val text: String, val languageCodeHints: Collection<String>)
+private data class DetectLanguageRequest(val text: String, val languageCodeHints: List<String>) {
+	constructor(text: String, languageCodeHints: Collection<String>) : this(text, languageCodeHints.toList())
+}
+
 @Serializable
 private data class DetectLanguageResponse(val languageCode: String)
 

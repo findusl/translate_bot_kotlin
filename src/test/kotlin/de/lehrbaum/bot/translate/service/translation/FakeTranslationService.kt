@@ -2,15 +2,15 @@ package de.lehrbaum.bot.translate.service.translation
 
 class FakeTranslationService : TranslationService {
 
-	override suspend fun detectLanguage(text: String, suggestions: Collection<String>): String? {
+	override suspend fun detectLanguage(text: String, suggestions: Collection<String>): String {
 		return "en"
 	}
 
 	override suspend fun getLanguages(): Collection<Language> {
 		return listOf(
-            Language("en", "English"),
-            Language("de", "German"),
-            Language("fr", "French")
+			Language("en", "English"),
+			Language("de", "German"),
+			Language("fr", "French")
 		)
 	}
 

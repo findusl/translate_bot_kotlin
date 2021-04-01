@@ -3,16 +3,11 @@ package de.lehrbaum.bot.translate.service.translation
 import com.natpryce.hamkrest.*
 import com.natpryce.hamkrest.assertion.assertThat
 import de.lehrbaum.bot.translate.KoinTestExtension
-import de.lehrbaum.bot.translate.setupKoin
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.BeforeAll
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
-import org.koin.test.AutoCloseKoinTest
 import org.koin.test.KoinTest
 import org.koin.test.get
-import org.koin.test.inject
 
 private val languageNotEmpty: Matcher<Language> = has(Language::code, !isBlank) and has(Language::name, !isBlank)
 
@@ -43,14 +38,14 @@ class YandexTranslationServiceE2eTest : KoinTest {
 	@Test
 	fun `Detect language with language suggestion should ignore the suggestion if incorrect`(): Unit = runBlocking {
 		val yandexTranslationService = YandexTranslationService(get(), get())
-		val language = yandexTranslationService.detectLanguage("Just here to say hello.", listOf("ar"))
+		val language = yandexTranslationService.detectLanguage("Just here to say hello.", setOf("ar"))
 		assertThat(language, equalTo("en"))
 	}
 
 	@Test
 	fun `Detect language with language suggestion should consider the suggestion`(): Unit = runBlocking {
 		val yandexTranslationService = YandexTranslationService(get(), get())
-		val language = yandexTranslationService.detectLanguage("Blitzkrieg", listOf("en"))
+		val language = yandexTranslationService.detectLanguage("Blitzkrieg", setOf("en"))
 		assertThat(language, equalTo("en"))
 	}
 

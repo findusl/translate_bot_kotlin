@@ -4,10 +4,9 @@ import com.github.kotlintelegrambot.dispatcher.handlers.CommandHandlerEnvironmen
 import com.github.kotlintelegrambot.dispatcher.handlers.TextHandlerEnvironment
 import com.github.kotlintelegrambot.dispatcher.text
 import com.github.kotlintelegrambot.entities.BotCommand
-import de.lehrbaum.bot.translate.Commands
-import de.lehrbaum.bot.translate.consumeCommand
-import de.lehrbaum.bot.translate.exitIfNull
-import de.lehrbaum.bot.translate.replyToMessage
+import de.lehrbaum.bot.translate.extensions.consumeCommand
+import de.lehrbaum.bot.translate.extensions.exitIfNull
+import de.lehrbaum.bot.translate.extensions.replyToMessage
 import de.lehrbaum.bot.translate.service.translation.TranslationService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,6 +28,7 @@ class TranslateBotLogic(
 		consumeCommand(Commands.STOP_TRANSLATING.command) { handleStopTranslatingCommand() }
 		consumeCommand(Commands.ADD_TRANSLATION_RULE.command) { handleAddTranslationRuleCommand() }
 		consumeCommand(Commands.REMOVE_TRANSLATION_RULE.command) { handleRemoveTranslationRuleCommand() }
+		consumeCommand(Commands.HELP.command) { handleHelpCommand() }
 		text { translateBotScope.launch { handleTextMessage() } }
 	}
 
@@ -44,8 +44,8 @@ class TranslateBotLogic(
 
 	private suspend fun CommandHandlerEnvironment.handleGetLanguagesCommand() {
 		val languagesHumanReadable = translationService.getLanguages()
-			.joinToString(separator = "\n,") { "${it.code}: ${it.name}" }
-		replyToMessage("Possible languages are: $languagesHumanReadable")
+			.joinToString(separator = "\n", prefix = "Possible languages are:\n") { "${it.code}: ${it.name}" }
+		replyToMessage(languagesHumanReadable)
 	}
 
 	private fun CommandHandlerEnvironment.handleStartTranslatingCommand() {
@@ -126,6 +126,14 @@ class TranslateBotLogic(
 
 		val activeRules = chatSettings.getHumanReadableTranslationRules()
 		replyToMessage("Removed translation rule for $languageCode. Active rules are: $activeRules")
+	}
+
+	private fun CommandHandlerEnvironment.handleHelpCommand() {
+		val helpText = Commands.COMMANDS.joinToString(
+			separator = "\n",
+			prefix = "Possible commands for this bot are:\n"
+		) { it.run { "/$command -> $description" } }
+		replyToMessage(helpText)
 	}
 
 	private suspend fun TextHandlerEnvironment.handleTextMessage() {

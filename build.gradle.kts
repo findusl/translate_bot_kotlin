@@ -12,7 +12,6 @@ plugins {
 	idea
 	kotlin("jvm") version "1.4.30"
 	kotlin("plugin.serialization") version "1.4.30"
-	// id("org.jlleitschuh.gradle.ktlint") version "10.0.0" // still some Problems with tab indent
 }
 
 group = "de.lehrbaum"
@@ -93,6 +92,6 @@ tasks.withType<Test> {
 	useJUnitPlatform()
 }
 
-tasks.withType<KotlinCompile>() {
+tasks.withType<KotlinCompile> {
 	kotlinOptions.jvmTarget = "13"
 }
