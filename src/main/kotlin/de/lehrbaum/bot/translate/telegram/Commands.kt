@@ -25,6 +25,13 @@ object Commands {
 	val REMOVE_TRANSLATION_RULE: BotCommand =
 		BotCommand("removeRule", "Argument is first part of rule, e.g. en")
 
+	val TRANSLATE: BotCommand =
+		BotCommand(
+			"translate",
+			"Translate the text following this command by the rules. This can be used if automatic " +
+					"translation is not desired. If the text is not translated, a reason is given."
+		)
+
 	val HELP: BotCommand by lazy { BotCommand("help", "Lists all possible commands") }
 
 	/** Contains all commands listed in this class. */
@@ -35,7 +42,8 @@ object Commands {
 		STOP_TRANSLATING,
 		ADD_TRANSLATION_RULE,
 		REMOVE_TRANSLATION_RULE,
-		HELP
+		TRANSLATE,
+		HELP,
 	)
 
 	// TODO write test that ensures that every command that is passed to the bot is also in the list

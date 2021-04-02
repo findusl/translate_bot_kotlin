@@ -2,6 +2,8 @@ package de.lehrbaum.bot.translate
 
 import com.sksamuel.hoplite.ConfigLoader
 import de.lehrbaum.bot.translate.config.Secrets
+import de.lehrbaum.bot.translate.repository.ChatSettingsRepository
+import de.lehrbaum.bot.translate.repository.ChatSettingsRepositoryImpl
 import de.lehrbaum.bot.translate.service.translation.TranslationService
 import de.lehrbaum.bot.translate.service.translation.YandexTokenService
 import de.lehrbaum.bot.translate.service.translation.YandexTranslationService
@@ -17,12 +19,12 @@ fun setupKoin() {
 		// use Koin logger
 		printLogger()
 		// declare modules
-		modules(configModule, applicationModule)
+		modules(configModule, applicationModule, repositoryModule)
 	}
 }
 
 private val applicationModule = module {
-	single { TranslateBotLogic(get(), get()) }
+	single { TranslateBotLogic(get(), get(), get()) }
 	single<TranslationService> { YandexTranslationService(get(), get()) }
 	single { YandexTokenService(get(), get()) }
 	single { setupKtorHttpClient() }
@@ -37,4 +39,8 @@ private fun setupKtorHttpClient(): HttpClient {
 
 private val configModule = module {
 	single { ConfigLoader().loadConfigOrThrow<Secrets>("/secrets.yaml") }
+}
+
+private val repositoryModule = module {
+	single<ChatSettingsRepository> { ChatSettingsRepositoryImpl() }
 }

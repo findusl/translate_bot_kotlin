@@ -54,6 +54,9 @@ dependencies {
 
 	implementation("com.github.kotlin-telegram-bot:kotlin-telegram-bot:+") {
 		exclude(module = "webhook")
+		exclude(module = "echo")
+		exclude(module = "dispatcher")
+		exclude(module = "polls")
 	}
 
 	// test implementations:
