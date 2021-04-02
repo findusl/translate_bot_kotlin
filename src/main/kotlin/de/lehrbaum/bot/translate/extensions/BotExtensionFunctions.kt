@@ -6,6 +6,8 @@ import com.github.kotlintelegrambot.dispatcher.handlers.CommandHandlerEnvironmen
 import com.github.kotlintelegrambot.dispatcher.handlers.HandleCommand
 import com.github.kotlintelegrambot.dispatcher.handlers.TextHandlerEnvironment
 import com.github.kotlintelegrambot.entities.ChatId
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 fun CommandHandlerEnvironment.replyToMessage(text: String) {
 	bot.sendMessage(ChatId.fromId(message.chat.id), text, replyToMessageId = message.messageId)
@@ -19,5 +21,18 @@ inline fun Dispatcher.consumeCommand(command: String, crossinline handleCommand:
 	command(command) {
 		update.consume()
 		handleCommand()
+	}
+}
+
+inline fun Dispatcher.consumeCommand(
+	command: String,
+	scope: CoroutineScope,
+	crossinline handleCommand: suspend CommandHandlerEnvironment.() -> Unit
+) {
+	command(command) {
+		update.consume()
+		scope.launch {
+			handleCommand()
+		}
 	}
 }

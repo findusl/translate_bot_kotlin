@@ -1,0 +1,1 @@
+Tests in this source project somehow interact with the environment. They require a special setup.

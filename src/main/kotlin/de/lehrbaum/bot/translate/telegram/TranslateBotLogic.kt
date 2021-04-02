@@ -10,6 +10,14 @@ import de.lehrbaum.bot.translate.extensions.replyToMessage
 import de.lehrbaum.bot.translate.repository.ChatSettings
 import de.lehrbaum.bot.translate.repository.ChatSettingsRepository
 import de.lehrbaum.bot.translate.service.translation.TranslationService
+import de.lehrbaum.bot.translate.telegram.Commands.ADD_TRANSLATION_RULE
+import de.lehrbaum.bot.translate.telegram.Commands.ECHO
+import de.lehrbaum.bot.translate.telegram.Commands.GET_LANGUAGES
+import de.lehrbaum.bot.translate.telegram.Commands.HELP
+import de.lehrbaum.bot.translate.telegram.Commands.REMOVE_TRANSLATION_RULE
+import de.lehrbaum.bot.translate.telegram.Commands.START_TRANSLATING
+import de.lehrbaum.bot.translate.telegram.Commands.STOP_TRANSLATING
+import de.lehrbaum.bot.translate.telegram.Commands.TRANSLATE
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,14 +34,14 @@ class TranslateBotLogic(
 	private val translateBotScope = CoroutineScope(Dispatchers.IO)
 
 	private val bot = telegramBotFactory.generateBot {
-		consumeCommand(Commands.ECHO.command) { handleEchoCommand() }
-		consumeCommand(Commands.GET_LANGUAGES.command) { translateBotScope.launch { handleGetLanguagesCommand() } }
-		consumeCommand(Commands.START_TRANSLATING.command) { handleStartTranslatingCommand() }
-		consumeCommand(Commands.STOP_TRANSLATING.command) { handleStopTranslatingCommand() }
-		consumeCommand(Commands.ADD_TRANSLATION_RULE.command) { handleAddTranslationRuleCommand() }
-		consumeCommand(Commands.REMOVE_TRANSLATION_RULE.command) { handleRemoveTranslationRuleCommand() }
-		consumeCommand(Commands.HELP.command) { handleHelpCommand() }
-		consumeCommand(Commands.TRANSLATE.command) { translateBotScope.launch { handleTranslateCommand() } }
+		consumeCommand(ECHO.command) { handleEchoCommand() }
+		consumeCommand(GET_LANGUAGES.command, translateBotScope) { handleGetLanguagesCommand() }
+		consumeCommand(START_TRANSLATING.command, translateBotScope) { handleStartTranslatingCommand() }
+		consumeCommand(STOP_TRANSLATING.command, translateBotScope) { handleStopTranslatingCommand() }
+		consumeCommand(ADD_TRANSLATION_RULE.command, translateBotScope) { handleAddTranslationRuleCommand() }
+		consumeCommand(REMOVE_TRANSLATION_RULE.command, translateBotScope) { handleRemoveTranslationRuleCommand() }
+		consumeCommand(HELP.command, translateBotScope) { handleHelpCommand() }
+		consumeCommand(TRANSLATE.command, translateBotScope) { handleTranslateCommand() }
 		text { translateBotScope.launch { handleTextMessage() } }
 	}
 
@@ -53,13 +61,13 @@ class TranslateBotLogic(
 		replyToMessage(languagesHumanReadable)
 	}
 
-	private fun CommandHandlerEnvironment.handleStartTranslatingCommand() {
+	private suspend fun CommandHandlerEnvironment.handleStartTranslatingCommand() {
 		val chatSettings = chatSettingsRepository.getSettings(message.chat.id)
 
 		if (chatSettings.translationRules.isEmpty()) {
 			replyToMessage(
 				"There are no active translation rules. Translating not activated. " +
-						"Use ${Commands.ADD_TRANSLATION_RULE.command} to add translation rules."
+						"Use ${ADD_TRANSLATION_RULE.command} to add translation rules."
 			)
 			return
 		}
@@ -69,7 +77,7 @@ class TranslateBotLogic(
 		replyToMessage("Activated translations for this chat. Active rules are: $activeRules")
 	}
 
-	private fun CommandHandlerEnvironment.handleStopTranslatingCommand() {
+	private suspend fun CommandHandlerEnvironment.handleStopTranslatingCommand() {
 		val chatSettings = chatSettingsRepository.getSettings(message.chat.id)
 		if (chatSettings.translationActive) {
 			chatSettingsRepository.deactivateTranslation(message.chat.id)
@@ -82,15 +90,15 @@ class TranslateBotLogic(
 		}
 	}
 
-	private fun CommandHandlerEnvironment.handleAddTranslationRuleCommand() {
+	private suspend fun CommandHandlerEnvironment.handleAddTranslationRuleCommand() {
 		val (source, target) = when (args.size) {
 			1 -> args[0].tryParseLanguagePair().exitIfNull {
-				replyToMessage("Incorrect parameter.\n" + Commands.ADD_TRANSLATION_RULE.description)
+				replyToMessage("Incorrect parameter.\n" + ADD_TRANSLATION_RULE.description)
 				return
 			}
 			2 -> Pair(args[0], args[1])
 			else -> {
-				replyToMessage("Incorrect count of parameters.\n" + Commands.ADD_TRANSLATION_RULE.description)
+				replyToMessage("Incorrect count of parameters.\n" + ADD_TRANSLATION_RULE.description)
 				return
 			}
 		}
@@ -98,14 +106,14 @@ class TranslateBotLogic(
 		addTranslationRule(source, target)
 	}
 
-	private fun CommandHandlerEnvironment.addTranslationRule(source: String, target: String) {
+	private suspend fun CommandHandlerEnvironment.addTranslationRule(source: String, target: String) {
 		val chatSettings = chatSettingsRepository.getSettings(message.chat.id)
 
 		if (chatSettings.translationRules.containsKey(source)) {
 			replyToMessage(
 				"There is already a translation rule for $source to ${chatSettings.translationRules[source]}. " +
 						"There can only be one rule for a given source language. " +
-						"You can delete the existing rule with /${Commands.ADD_TRANSLATION_RULE.command} $source"
+						"You can delete the existing rule with /${ADD_TRANSLATION_RULE.command} $source"
 			)
 			return
 		}
@@ -115,9 +123,9 @@ class TranslateBotLogic(
 		replyToMessage("Added new translation rule . Active rules are: $activeRules")
 	}
 
-	private fun CommandHandlerEnvironment.handleRemoveTranslationRuleCommand() {
+	private suspend fun CommandHandlerEnvironment.handleRemoveTranslationRuleCommand() {
 		val chatSettings = chatSettingsRepository.getSettings(message.chat.id)
-		if (!ensureArgumentSize(1, Commands.REMOVE_TRANSLATION_RULE)) return
+		if (!ensureArgumentSize(1, REMOVE_TRANSLATION_RULE)) return
 
 		val languageCode = args[0].substringBefore("-")
 
@@ -132,7 +140,7 @@ class TranslateBotLogic(
 		replyToMessage("Removed translation rule for $languageCode. Active rules are: $activeRules")
 	}
 
-	private fun CommandHandlerEnvironment.handleHelpCommand() {
+	private suspend fun CommandHandlerEnvironment.handleHelpCommand() {
 		val isTranslationActive = chatSettingsRepository.getSettings(message.chat.id).translationActive
 		val statusHumanReadable =
 			if (isTranslationActive) "Automatic translation for this chat is active. Use /stop to stop translating."

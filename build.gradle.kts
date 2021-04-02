@@ -28,7 +28,8 @@ repositories {
 }
 
 dependencies {
-	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:$kotlinVersion")
+	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
 
 	implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
 	implementation("com.sksamuel.hoplite:hoplite-yaml:$hopliteVersion")
@@ -60,6 +61,8 @@ dependencies {
 	}
 
 	// test implementations:
+	testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinVersion")
+
 	testImplementation("org.koin:koin-test:$koinVersion")
 
 	testImplementation("com.natpryce:hamkrest:1.8.0.1")

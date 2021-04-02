@@ -2,4 +2,5 @@ root = true
 
 [*.{kt,kts}]
 indent_style = tab
-# Intellij continuation indent problem: https://youtrack.jetbrains.com/issue/KT-41072
+# the ij_kotlin_imports_layout doesn't seem to work
+ij_kotlin_imports_layout=*,java.**,javax.**,kotlin.**,kotlinx.**,^

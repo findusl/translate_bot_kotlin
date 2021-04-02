@@ -13,6 +13,7 @@ import io.ktor.client.*
 import io.ktor.client.features.json.*
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
+import java.io.File
 
 fun setupKoin() {
 	startKoin {
@@ -42,5 +43,5 @@ private val configModule = module {
 }
 
 private val repositoryModule = module {
-	single<ChatSettingsRepository> { ChatSettingsRepositoryImpl() }
+	single<ChatSettingsRepository> { ChatSettingsRepositoryImpl(File("/data/settings.json")) }
 }

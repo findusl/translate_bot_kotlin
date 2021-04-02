@@ -9,8 +9,6 @@ import org.junit.jupiter.api.extension.RegisterExtension
 import org.koin.test.KoinTest
 import org.koin.test.get
 
-private val languageNotEmpty: Matcher<Language> = has(Language::code, !isBlank) and has(Language::name, !isBlank)
-
 /**
  * This test does something I learned not to do. It tests the 3rd party consumed service for correctness.
  * I anyway wrote the test because I want to easily react to any problems with the API of the consumed service.
@@ -56,3 +54,5 @@ class YandexTranslationServiceE2eTest : KoinTest {
 		assertThat(language, equalTo("Hallo"))
 	}
 }
+
+private val languageNotEmpty: Matcher<Language> = has(Language::code, !isBlank) and has(Language::name, !isBlank)
