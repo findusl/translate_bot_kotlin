@@ -75,13 +75,11 @@ val main: SourceSet by sourceSets.named("main")
 
 val e2eTest: SourceSet by sourceSets.creating {
 	kotlin {
-		compileClasspath += main.output + configurations.testRuntimeClasspath
-		runtimeClasspath += output + compileClasspath
+		compileClasspath += main.output + configurations.testRuntimeClasspath.get()
+		runtimeClasspath += compileClasspath
 	}
 	java.srcDir("src/e2eTest/kotlin")
 	resources.srcDir("src/main/resources")
-	idea.module.sourceDirs.removeAll(java.srcDirs)
-	idea.module.testSourceDirs.addAll(java.srcDirs)
 }
 
 val runE2eTests by tasks.creating(Test::class) {
