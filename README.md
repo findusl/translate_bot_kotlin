@@ -9,3 +9,11 @@ Next steps:
  - Deploy (wohoo)
  - Automate deployment to docker on server (jenkins?)
  - Write tests and setup github actions that run those tests automatically
+
+## Deploy with Docker:
+
+1. Run `gradle installDist` to generate the necessary files. 
+   The result will be located in `build/install/translate_bot_kotlin`
+2. Run `docker build -t translate_bot_kotlin .` to generate the docker container.
+3. Now run the container. In the following command you have to insert the path where the settings.json should be saved. 
+   `docker run -v <directory of settings file>:/data translate_bot_kotlin`
