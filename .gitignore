@@ -2,6 +2,7 @@
 # I don't want any sonar lint in the project
 .idea/sonarlint/
 /settings.json
+/translate_bot_kotlin.tar
 
 # Default kotlin gradle:
 .DS_Store

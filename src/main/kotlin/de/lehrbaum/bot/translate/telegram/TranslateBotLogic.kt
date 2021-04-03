@@ -113,7 +113,7 @@ class TranslateBotLogic(
 			replyToMessage(
 				"There is already a translation rule for $source to ${chatSettings.translationRules[source]}. " +
 						"There can only be one rule for a given source language. " +
-						"You can delete the existing rule with /${ADD_TRANSLATION_RULE.command} $source"
+						"You can delete the existing rule with /${REMOVE_TRANSLATION_RULE.command} $source"
 			)
 			return
 		}

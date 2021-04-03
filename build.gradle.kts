@@ -15,7 +15,7 @@ plugins {
 }
 
 group = "de.lehrbaum"
-version = "1.0-SNAPSHOT"
+version = "1.0"
 
 application {
 	mainClass.set("de.lehrbaum.bot.translate.MainKt")
