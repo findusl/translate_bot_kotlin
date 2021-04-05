@@ -1,12 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val koinVersion = "2.2.2"
-val junitVersion: String by project
-val jsonwebtokenVersion: String by project
-val ktorVersion: String by project
-val kotlinVersion: String by project
-val hopliteVersion: String by project
-
 plugins {
 	application
 	idea
@@ -28,6 +21,14 @@ repositories {
 }
 
 dependencies {
+	// dependabot does not find the versions in the gradle.properties, but it does here
+	val koinVersion = "2.2.2"
+	val junitVersion = "5.6.0"
+	val jsonwebtokenVersion = "0.11.2"
+	val ktorVersion = "1.5.2"
+	val kotlinVersion = "1.4.3"
+	val hopliteVersion = "1.4.0"
+
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:$kotlinVersion")
 	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
 
@@ -38,7 +39,7 @@ dependencies {
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:$jsonwebtokenVersion")
 	runtimeOnly("io.jsonwebtoken:jjwt-gson:$jsonwebtokenVersion")
 	// Needed for RSASSA-PSS (PS256, PS384, PS512) algorithms:
-	runtimeOnly("org.bouncycastle:bcprov-jdk15on:+")
+	runtimeOnly("org.bouncycastle:bcprov-jdk15on:1.68")
 
 	// TODO fix version conflict with telegram library and update to latest version
 	//  then use kotlinx serialization to prevent problems with kotlin specific features
@@ -53,7 +54,7 @@ dependencies {
 
 	implementation("org.koin:koin-core:$koinVersion")
 
-	implementation("com.github.kotlin-telegram-bot:kotlin-telegram-bot:+") {
+	implementation("com.github.kotlin-telegram-bot:kotlin-telegram-bot:6.0.4") {
 		exclude(module = "webhook")
 		exclude(module = "echo")
 		exclude(module = "dispatcher")
