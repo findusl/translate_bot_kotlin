@@ -23,7 +23,7 @@ repositories {
 dependencies {
 	// dependabot does not find the versions in the gradle.properties, but it does here
 	val koinVersion = "2.2.2"
-	val junitVersion = "5.6.0"
+	val junitVersion = "5.7.1"
 	val jsonwebtokenVersion = "0.11.2"
 	val ktorVersion = "1.5.2"
 	val kotlinVersion = "1.4.3"
