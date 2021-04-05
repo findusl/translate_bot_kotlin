@@ -26,7 +26,7 @@ dependencies {
 	val junitVersion = "5.7.1"
 	val jsonwebtokenVersion = "0.11.2"
 	val ktorVersion = "1.5.3"
-	val kotlinVersion = "1.4.3"
+	val kotlinVersion = "1.4.3-native-mt"
 	val hopliteVersion = "1.4.0"
 
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:$kotlinVersion")
