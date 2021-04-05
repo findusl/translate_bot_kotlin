@@ -25,7 +25,7 @@ dependencies {
 	val koinVersion = "2.2.2"
 	val junitVersion = "5.6.0"
 	val jsonwebtokenVersion = "0.11.2"
-	val ktorVersion = "1.5.2"
+	val ktorVersion = "1.5.3"
 	val kotlinVersion = "1.4.3"
 	val hopliteVersion = "1.4.0"
 
