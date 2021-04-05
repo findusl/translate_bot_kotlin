@@ -11,7 +11,7 @@ plugins {
 	application
 	idea
 	kotlin("jvm") version "1.4.32"
-	kotlin("plugin.serialization") version "1.4.30"
+	kotlin("plugin.serialization") version "1.4.32"
 }
 
 group = "de.lehrbaum"
