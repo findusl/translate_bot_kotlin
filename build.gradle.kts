@@ -1,6 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val koinVersion: String by project
+val koinVersion = "2.2.2"
 val junitVersion: String by project
 val jsonwebtokenVersion: String by project
 val ktorVersion: String by project
