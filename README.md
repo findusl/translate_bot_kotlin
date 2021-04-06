@@ -1,3 +1,5 @@
+[![Kotlin CI with Gradle](https://github.com/findusl/translate_bot_kotlin/actions/workflows/gradle.yml/badge.svg)](https://github.com/findusl/translate_bot_kotlin/actions/workflows/gradle.yml)
+
 # translate_bot_kotlin
 
 Just a little project where I try out Kotlin. Maybe I'm going to complete the bot maybe not. I'll see
