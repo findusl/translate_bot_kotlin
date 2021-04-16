@@ -6,10 +6,12 @@ import com.github.kotlintelegrambot.dispatcher.text
 import com.github.kotlintelegrambot.entities.BotCommand
 import de.lehrbaum.bot.translate.extensions.consumeCommand
 import de.lehrbaum.bot.translate.extensions.exitIfNull
+import de.lehrbaum.bot.translate.extensions.generateLogger
 import de.lehrbaum.bot.translate.extensions.replyToMessage
 import de.lehrbaum.bot.translate.repository.ChatSettings
 import de.lehrbaum.bot.translate.repository.ChatSettingsRepository
 import de.lehrbaum.bot.translate.service.translation.TranslationService
+import de.lehrbaum.bot.translate.service.translation.YandexTokenService
 import de.lehrbaum.bot.translate.telegram.Commands.ADD_TRANSLATION_RULE
 import de.lehrbaum.bot.translate.telegram.Commands.ECHO
 import de.lehrbaum.bot.translate.telegram.Commands.GET_LANGUAGES
@@ -18,12 +20,12 @@ import de.lehrbaum.bot.translate.telegram.Commands.REMOVE_TRANSLATION_RULE
 import de.lehrbaum.bot.translate.telegram.Commands.START_TRANSLATING
 import de.lehrbaum.bot.translate.telegram.Commands.STOP_TRANSLATING
 import de.lehrbaum.bot.translate.telegram.Commands.TRANSLATE
+import java.util.logging.Level
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import mu.KotlinLogging
 
-private val logger = KotlinLogging.logger {}
+private val logger = generateLogger<YandexTokenService>()
 
 class TranslateBotLogic(
 	telegramBotFactory: TelegramBotFactory,
@@ -161,7 +163,7 @@ class TranslateBotLogic(
 		val chatSettings = chatSettingsRepository.getSettings(message.chat.id)
 		val suggestedLanguages = chatSettings.translationRules.keys
 		val sourceLanguage = translationService.detectLanguage(text, suggestedLanguages) ?: return
-		logger.debug { "Detected text \"$text\" as language $sourceLanguage" }
+		logger.log(Level.FINE) { "Detected text \"$text\" as language $sourceLanguage" }
 
 		val targetLanguage = chatSettings.translationRules[sourceLanguage]
 		if (targetLanguage == null) {
@@ -179,11 +181,11 @@ class TranslateBotLogic(
 
 		val suggestedLanguages = chatSettings.translationRules.keys
 		val sourceLanguage = translationService.detectLanguage(text, suggestedLanguages) ?: return
-		logger.debug { "Detected text \"$text\" as language $sourceLanguage" }
+		logger.log(Level.FINE) { "Detected text \"$text\" as language $sourceLanguage" }
 
 		val targetLanguage = chatSettings.translationRules[sourceLanguage]
 		if (targetLanguage == null) {
-			logger.debug { "No rule for $sourceLanguage configured for this chat." }
+			logger.log(Level.FINE) { "No rule for $sourceLanguage configured for this chat." }
 			return
 		}
 
