@@ -1,6 +1,6 @@
 package de.lehrbaum.bot.translate
 
-import com.sksamuel.hoplite.ConfigLoader
+import com.charleskorn.kaml.Yaml
 import de.lehrbaum.bot.translate.config.Secrets
 import de.lehrbaum.bot.translate.repository.ChatSettingsRepository
 import de.lehrbaum.bot.translate.repository.ChatSettingsRepositoryImpl
@@ -11,6 +11,7 @@ import de.lehrbaum.bot.translate.telegram.TelegramBotFactory
 import de.lehrbaum.bot.translate.telegram.TranslateBotLogic
 import io.ktor.client.*
 import io.ktor.client.features.json.*
+import io.ktor.client.features.json.serializer.*
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import java.io.File
@@ -34,14 +35,20 @@ private val applicationModule = module {
 
 private fun setupKtorHttpClient(): HttpClient {
 	return HttpClient {
-		install(JsonFeature)
+		install(JsonFeature) {
+			serializer = KotlinxSerializer()
+		}
 	}
 }
 
 private val configModule = module {
-	single { ConfigLoader().loadConfigOrThrow<Secrets>("/secrets.yaml") }
+	single {
+		Yaml.default.decodeFromString(Secrets.serializer(), File("./secrets.yaml").readText())
+	}
 }
 
+private const val SETTINGS_FILE_PATH = "./settings.json"
+
 private val repositoryModule = module {
-	single<ChatSettingsRepository> { ChatSettingsRepositoryImpl(File("/data/settings.json")) }
+	single<ChatSettingsRepository> { ChatSettingsRepositoryImpl(File(SETTINGS_FILE_PATH)) }
 }

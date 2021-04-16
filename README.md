@@ -19,3 +19,12 @@ Next steps:
 
 Alternatively after Step 3 one can save the docker container to deploy it somewhere else, using 
 `docker save --output translate_bot_kotlin.tar translate_bot_kotlin`
+
+## Creating native image:
+
+Install GraalVM and install native image. Add to path using 
+`export PATH=/Library/Java/JavaVirtualMachines/graalvm-ce-java11-21.0.0.2/Contents/Home/bin:$PATH`.
+Create jar by running `gradle jarWithDependencies` (Or just `gradle jar` until the other task is fixed).
+Then run `native-image -jar build/libs/translate_bot_kotlin-1.1-SNAPSHOT.jar -H:Name=translate_bot_kotlin`.
+Not yet working, because of some coroutines stuff.
+Try out `--target` and see if it works somehow with `Linux x86`

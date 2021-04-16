@@ -1,5 +1,6 @@
 package de.lehrbaum.bot.translate.repository
 
+import de.lehrbaum.bot.translate.extensions.generateLogger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
@@ -18,6 +19,8 @@ interface ChatSettingsRepository {
 	suspend fun addTranslationRule(chatId: Long, sourceLang: String, targetLang: String): ChatSettings
 	suspend fun removeTranslationRule(chatId: Long, sourceLang: String): ChatSettings
 }
+
+private val logger = generateLogger<ChatSettingsRepositoryImpl>()
 
 class ChatSettingsRepositoryImpl(private val settingsFile: File) : ChatSettingsRepository {
 
@@ -73,6 +76,7 @@ class ChatSettingsRepositoryImpl(private val settingsFile: File) : ChatSettingsR
 
 	private suspend fun loadSettings(): MutableMap<Long, ChatSettings> {
 		if (!settingsFile.exists()) {
+			logger.info { "Settings file did not exist." }
 			return mutableMapOf()
 		}
 		val json = withContext(Dispatchers.IO) {

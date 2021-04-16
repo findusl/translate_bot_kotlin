@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "de.lehrbaum"
-version = "1.0"
+version = "1.1-SNAPSHOT"
 
 application {
 	mainClass.set("de.lehrbaum.bot.translate.MainKt")
@@ -27,13 +27,11 @@ dependencies {
 	val jsonwebtokenVersion = "0.11.2"
 	val ktorVersion = "1.5.3"
 	val kotlinVersion = "1.4.3"
-	val hopliteVersion = "1.4.0"
 
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:$kotlinVersion")
 	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.1.0")
 
-	implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
-	implementation("com.sksamuel.hoplite:hoplite-yaml:$hopliteVersion")
+	implementation("com.charleskorn.kaml:kaml-jvm:0.30.0")
 
 	implementation("io.jsonwebtoken:jjwt-api:$jsonwebtokenVersion")
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:$jsonwebtokenVersion")
@@ -46,11 +44,6 @@ dependencies {
 	implementation("io.ktor:ktor-client-core:$ktorVersion")
 	implementation("io.ktor:ktor-client-cio:$ktorVersion")
 	implementation("io.ktor:ktor-client-serialization:$ktorVersion")
-	implementation("io.ktor:ktor-client-logging:$ktorVersion")
-
-	implementation("ch.qos.logback:logback-classic:1.2.3")
-
-	implementation("io.github.microutils:kotlin-logging-jvm:2.0.6")
 
 	implementation("org.koin:koin-core:$koinVersion")
 
@@ -71,6 +64,9 @@ dependencies {
 	testImplementation(kotlin("test-junit5"))
 	testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+
+	testImplementation("io.ktor:ktor-client-logging:$ktorVersion")
+	testImplementation("ch.qos.logback:logback-classic:1.2.3")
 }
 
 java.targetCompatibility = JavaVersion.VERSION_15
@@ -93,10 +89,34 @@ val runE2eTests by tasks.creating(Test::class) {
 	classpath = e2eTest.runtimeClasspath
 }
 
+// TODO for some reason this task doesn't work, it creates a jar without project files
+val jarWithDependencies by tasks.creating(Jar::class) {
+	description = "Jar with all dependencies"
+	group = "build"
+	archiveBaseName.set(archiveBaseName.get() + "-with-dependencies")
+	configurations.compileClasspath.get().forEach { file: File ->
+		from(zipTree(file.absoluteFile)) {
+			exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
+		}
+	}
+}
+
+tasks.withType<Jar> {
+	// TODO consider excluding the template resource file.
+	manifest {
+		attributes["Main-Class"] = "de.lehrbaum.bot.translate.MainKt"
+	}
+	configurations.runtimeClasspath.get().forEach { file: File ->
+		from(zipTree(file.absoluteFile)) {
+			exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
+		}
+	}
+}
+
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
 
 tasks.withType<KotlinCompile> {
-	kotlinOptions.jvmTarget = "13"
+	kotlinOptions.jvmTarget = "11"
 }

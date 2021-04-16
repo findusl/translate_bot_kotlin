@@ -25,6 +25,7 @@ class KoinTestExtension : BeforeEachCallback, AfterEachCallback {
 			install(JsonFeature)
 			install(Logging) {
 				level = LogLevel.ALL
+				// TODO use custom logger here based on java util logging
 			}
 		}
 	}

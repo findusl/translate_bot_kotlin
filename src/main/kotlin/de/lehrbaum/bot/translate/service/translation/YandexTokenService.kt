@@ -1,6 +1,7 @@
 package de.lehrbaum.bot.translate.service.translation
 
 import de.lehrbaum.bot.translate.config.Secrets
+import de.lehrbaum.bot.translate.extensions.generateLogger
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.ktor.client.*
@@ -8,13 +9,12 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.http.ContentType.*
 import kotlinx.serialization.Serializable
-import mu.KotlinLogging
 import java.security.KeyFactory
 import java.security.PrivateKey
 import java.security.spec.PKCS8EncodedKeySpec
 import java.util.*
 
-private val logger = KotlinLogging.logger {}
+private val logger = generateLogger<YandexTokenService>()
 
 class YandexTokenService(private val httpClient: HttpClient, private val secrets: Secrets) {
 
