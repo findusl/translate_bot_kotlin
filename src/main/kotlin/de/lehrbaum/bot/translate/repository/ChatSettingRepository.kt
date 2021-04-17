@@ -8,8 +8,8 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
+import kotlinx.serialization.builtins.MapSerializer
+import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 
 interface ChatSettingsRepository {
@@ -21,6 +21,8 @@ interface ChatSettingsRepository {
 }
 
 private val logger = generateLogger<ChatSettingsRepositoryImpl>()
+
+private val settingsSerializer = MapSerializer(Long.serializer(), ChatSettings.serializer())
 
 class ChatSettingsRepositoryImpl(private val settingsFile: File) : ChatSettingsRepository {
 
@@ -66,7 +68,7 @@ class ChatSettingsRepositoryImpl(private val settingsFile: File) : ChatSettingsR
 	}
 
 	private suspend fun persistSettings() {
-		val json = Json.encodeToString(chatsSettingsCache)
+		val json = Json.encodeToString(settingsSerializer, chatsSettingsCache)
 		withContext(Dispatchers.IO) {
 			fileMutex.withLock {
 				settingsFile.writeText(json)
@@ -84,7 +86,7 @@ class ChatSettingsRepositoryImpl(private val settingsFile: File) : ChatSettingsR
 				settingsFile.readText()
 			}
 		}
-		return Json.decodeFromString(json)
+		return Json.decodeFromString(settingsSerializer, json).toMutableMap()
 	}
 }
 

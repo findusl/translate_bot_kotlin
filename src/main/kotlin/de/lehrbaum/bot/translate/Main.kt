@@ -6,6 +6,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import java.io.File
 import java.util.logging.*
+import kotlin.random.Random
 
 var BASE_PATH: File = File(".")
 
@@ -19,6 +20,9 @@ fun main(args: Array<String>) {
 	println("Hello world")
 	MainApplication().runBot()
 }
+
+/** Just used to reference the package */
+private class Main
 
 private val mainLogger = Logger.getLogger(Main::class.java.packageName)
 
@@ -35,10 +39,8 @@ private fun setupLogger() {
 	handler.level = Level.ALL
 	// TODO make configurable and log to file and system err etc
 	mainLogger.addHandler(handler)
+	Random(0)
 }
-
-/** Just used to reference the package */
-private class Main
 
 @KoinApiExtension
 class MainApplication : KoinComponent {

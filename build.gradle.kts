@@ -17,6 +17,7 @@ application {
 repositories {
 	mavenCentral()
 	jcenter()
+	mavenLocal()
 	maven(url = "https://jitpack.io")
 }
 
@@ -88,11 +89,12 @@ val runE2eTests by tasks.creating(Test::class) {
 }
 
 // TODO for some reason this task doesn't work, it creates a jar without project files
+// somehow add `from sourceSets.main.allSource` or something like that
 val jarWithDependencies by tasks.creating(Jar::class) {
 	description = "Jar with all dependencies"
 	group = "build"
 	archiveBaseName.set(archiveBaseName.get() + "-with-dependencies")
-	configurations.compileClasspath.get().forEach { file: File ->
+	configurations.runtimeClasspath.get().forEach { file: File ->
 		from(zipTree(file.absoluteFile)) {
 			exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
 		}
@@ -116,5 +118,8 @@ tasks.withType<Test> {
 }
 
 tasks.withType<KotlinCompile> {
-	kotlinOptions.jvmTarget = "11"
+	kotlinOptions {
+		jvmTarget = "11"
+		javaParameters = true
+	}
 }
