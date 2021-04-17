@@ -163,7 +163,7 @@ class TranslateBotLogic(
 		val chatSettings = chatSettingsRepository.getSettings(message.chat.id)
 		val suggestedLanguages = chatSettings.translationRules.keys
 		val sourceLanguage = translationService.detectLanguage(text, suggestedLanguages) ?: return
-		logger.log(Level.FINE) { "Detected text \"$text\" as language $sourceLanguage" }
+		logger.fine { "Detected text \"$text\" as language $sourceLanguage" }
 
 		val targetLanguage = chatSettings.translationRules[sourceLanguage]
 		if (targetLanguage == null) {
@@ -181,11 +181,11 @@ class TranslateBotLogic(
 
 		val suggestedLanguages = chatSettings.translationRules.keys
 		val sourceLanguage = translationService.detectLanguage(text, suggestedLanguages) ?: return
-		logger.log(Level.FINE) { "Detected text \"$text\" as language $sourceLanguage" }
+		logger.fine { "Detected text \"$text\" as language $sourceLanguage" }
 
 		val targetLanguage = chatSettings.translationRules[sourceLanguage]
 		if (targetLanguage == null) {
-			logger.log(Level.FINE) { "No rule for $sourceLanguage configured for this chat." }
+			logger.fine { "No rule for $sourceLanguage configured for this chat." }
 			return
 		}
 

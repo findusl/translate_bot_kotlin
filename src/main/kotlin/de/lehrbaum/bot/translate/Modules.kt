@@ -41,14 +41,15 @@ private fun setupKtorHttpClient(): HttpClient {
 	}
 }
 
+// TODO make the folder configurable and use for logging as well
 private val configModule = module {
 	single {
-		Yaml.default.decodeFromString(Secrets.serializer(), File("./secrets.yaml").readText())
+		Yaml.default.decodeFromString(Secrets.serializer(), File(BASE_PATH, "secrets.yaml").readText())
 	}
 }
 
-private const val SETTINGS_FILE_PATH = "./settings.json"
+private const val SETTINGS_FILE_NAME = "settings.json"
 
 private val repositoryModule = module {
-	single<ChatSettingsRepository> { ChatSettingsRepositoryImpl(File(SETTINGS_FILE_PATH)) }
+	single<ChatSettingsRepository> { ChatSettingsRepositoryImpl(File(BASE_PATH, SETTINGS_FILE_NAME)) }
 }
