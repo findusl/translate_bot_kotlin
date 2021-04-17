@@ -1,6 +1,7 @@
 package de.lehrbaum.bot.translate.repository
 
 import de.lehrbaum.bot.translate.extensions.generateLogger
+import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
@@ -10,7 +11,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import java.io.File
 
 interface ChatSettingsRepository {
 	suspend fun getSettings(chatId: Long): ChatSettings

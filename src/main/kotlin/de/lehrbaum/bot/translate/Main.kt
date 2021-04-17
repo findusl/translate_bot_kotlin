@@ -4,11 +4,16 @@ import de.lehrbaum.bot.translate.telegram.TranslateBotLogic
 import org.koin.core.component.KoinApiExtension
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import java.io.File
 import java.util.logging.*
 
+var BASE_PATH: File = File(".")
 
 @KoinApiExtension
-fun main() {
+fun main(args: Array<String>) {
+	if (args.isNotEmpty()) {
+		BASE_PATH = File(args[0])
+	}
 	setupLogger()
 	setupKoin()
 	println("Hello world")
