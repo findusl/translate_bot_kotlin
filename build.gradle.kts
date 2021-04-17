@@ -39,8 +39,6 @@ dependencies {
 	// Needed for RSASSA-PSS (PS256, PS384, PS512) algorithms:
 	runtimeOnly("org.bouncycastle:bcprov-jdk15on:1.68")
 
-	// TODO fix version conflict with telegram library and update to latest version
-	//  then use kotlinx serialization to prevent problems with kotlin specific features
 	implementation("io.ktor:ktor-client-core:$ktorVersion")
 	implementation("io.ktor:ktor-client-cio:$ktorVersion")
 	implementation("io.ktor:ktor-client-serialization:$ktorVersion")
