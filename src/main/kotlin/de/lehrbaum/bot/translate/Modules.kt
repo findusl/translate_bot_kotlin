@@ -4,9 +4,7 @@ import com.charleskorn.kaml.Yaml
 import de.lehrbaum.bot.translate.config.Secrets
 import de.lehrbaum.bot.translate.repository.ChatSettingsRepository
 import de.lehrbaum.bot.translate.repository.ChatSettingsRepositoryImpl
-import de.lehrbaum.bot.translate.service.translation.TranslationService
-import de.lehrbaum.bot.translate.service.translation.YandexTokenService
-import de.lehrbaum.bot.translate.service.translation.YandexTranslationService
+import de.lehrbaum.bot.translate.service.translation.*
 import de.lehrbaum.bot.translate.telegram.TelegramBotFactory
 import de.lehrbaum.bot.translate.telegram.TranslateBotLogic
 import io.ktor.client.*
@@ -15,6 +13,8 @@ import io.ktor.client.features.json.serializer.*
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import java.io.File
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.plus
 
 fun setupKoin() {
 	startKoin {
@@ -36,7 +36,12 @@ private val applicationModule = module {
 private fun setupKtorHttpClient(): HttpClient {
 	return HttpClient {
 		install(JsonFeature) {
-			serializer = KotlinxSerializer()
+			serializer = KotlinxSerializer(kotlinx.serialization.json.Json {
+				serializersModule = SerializersModule {
+					addTokenSerializers()
+					addTranslationSerializers()
+				}
+			})
 		}
 	}
 }

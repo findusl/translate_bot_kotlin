@@ -24,6 +24,7 @@ import java.util.logging.Level
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 private val logger = generateLogger<YandexTokenService>()
 
@@ -48,6 +49,11 @@ class TranslateBotLogic(
 	}
 
 	fun startLogic() {
+		logger.fine { "Try translation" }
+		runBlocking {
+			val translation = translationService.translate("Hello", "en", "de")
+			logger.fine { "Translation result $translation" }
+		}
 		logger.info { "Start polling telegram bot" }
 		bot.startPolling()
 	}

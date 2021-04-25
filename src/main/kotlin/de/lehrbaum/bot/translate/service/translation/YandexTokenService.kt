@@ -13,6 +13,7 @@ import java.security.KeyFactory
 import java.security.PrivateKey
 import java.security.spec.PKCS8EncodedKeySpec
 import java.util.*
+import kotlinx.serialization.modules.SerializersModuleBuilder
 
 private val logger = generateLogger<YandexTokenService>()
 
@@ -63,8 +64,13 @@ class YandexTokenService(private val httpClient: HttpClient, private val secrets
 }
 
 @Serializable
-private data class BearerTokenRequest(val jwt: String)
+public data class BearerTokenRequest(val jwt: String)
 
 @Serializable
-private data class BearerTokenResponse(val iamToken: String, val expiresAt: String)
+public data class BearerTokenResponse(val iamToken: String, val expiresAt: String)
 // TODO see if expiresAt can be automatically parsed to date
+
+fun SerializersModuleBuilder.addTokenSerializers() {
+	contextual(BearerTokenRequest::class, BearerTokenRequest.serializer())
+	contextual(BearerTokenResponse::class, BearerTokenResponse.serializer())
+}

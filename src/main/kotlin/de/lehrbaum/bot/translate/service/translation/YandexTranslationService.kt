@@ -4,6 +4,7 @@ import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.modules.SerializersModuleBuilder
 
 
 class YandexTranslationService(private val httpClient: HttpClient, private val yandexTokenService: YandexTokenService) :
@@ -76,4 +77,14 @@ private data class TranslateTextRequest(
 private data class TranslateTextResponse(val translations: Collection<Translation>) {
 	@Serializable
 	data class Translation(val text: String)
+}
+
+fun SerializersModuleBuilder.addTranslationSerializers() {
+	contextual(DetectLanguageRequest::class, DetectLanguageRequest.serializer())
+	contextual(DetectLanguageResponse::class, DetectLanguageResponse.serializer())
+	contextual(GetLanguagesResponse::class, GetLanguagesResponse.serializer())
+	contextual(GetLanguagesResponse.Language::class, GetLanguagesResponse.Language.serializer())
+	contextual(TranslateTextRequest::class, TranslateTextRequest.serializer())
+	contextual(TranslateTextResponse::class, TranslateTextResponse.serializer())
+	contextual(TranslateTextResponse.Translation::class, TranslateTextResponse.Translation.serializer())
 }
