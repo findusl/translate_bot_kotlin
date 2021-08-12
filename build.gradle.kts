@@ -31,7 +31,7 @@ dependencies {
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:$kotlinVersion")
 	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.2")
 
-	implementation("com.charleskorn.kaml:kaml-jvm:0.35.1")
+	implementation("com.charleskorn.kaml:kaml-jvm:0.35.2")
 
 	implementation("io.jsonwebtoken:jjwt-api:$jsonwebtokenVersion")
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:$jsonwebtokenVersion")
