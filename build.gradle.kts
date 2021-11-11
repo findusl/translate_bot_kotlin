@@ -64,7 +64,7 @@ dependencies {
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 
 	testImplementation("io.ktor:ktor-client-logging:$ktorVersion")
-	testImplementation("ch.qos.logback:logback-classic:1.2.6")
+	testImplementation("ch.qos.logback:logback-classic:1.2.7")
 }
 
 java.targetCompatibility = JavaVersion.VERSION_15
