@@ -37,7 +37,7 @@ dependencies {
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:$jsonwebtokenVersion")
 	runtimeOnly("io.jsonwebtoken:jjwt-gson:$jsonwebtokenVersion")
 	// Needed for RSASSA-PSS (PS256, PS384, PS512) algorithms:
-	runtimeOnly("org.bouncycastle:bcprov-jdk15on:1.69")
+	runtimeOnly("org.bouncycastle:bcprov-jdk15on:1.70")
 
 	implementation("io.ktor:ktor-client-core:$ktorVersion")
 	implementation("io.ktor:ktor-client-cio:$ktorVersion")
