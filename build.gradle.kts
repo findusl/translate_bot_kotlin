@@ -29,7 +29,7 @@ dependencies {
 	val kotlinVersion = "1.6.0"
 
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:$kotlinVersion")
-	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1")
+	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
 
 	implementation("com.charleskorn.kaml:kaml-jvm:0.38.0")
 
