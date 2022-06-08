@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
 	application
 	idea
-	kotlin("jvm") version "1.6.10"
+	kotlin("jvm") version "1.7.0"
 	kotlin("plugin.serialization") version "1.6.10"
 }
 
@@ -24,7 +24,7 @@ dependencies {
 	// dependabot does not find the versions in the gradle.properties, but it does here
 	val koinVersion = "2.2.2"
 	val junitVersion = "5.8.2"
-	val jsonwebtokenVersion = "0.11.2"
+	val jsonwebtokenVersion = "0.11.3"
 	val ktorVersion = "1.6.8"
 	val kotlinVersion = "1.6.0"
 
