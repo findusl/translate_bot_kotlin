@@ -3,8 +3,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
 	application
 	idea
-	kotlin("jvm") version "1.6.10"
-	kotlin("plugin.serialization") version "1.6.10"
+	kotlin("jvm") version "1.7.0"
+	kotlin("plugin.serialization") version "1.7.0"
 }
 
 group = "de.lehrbaum"
@@ -24,14 +24,14 @@ dependencies {
 	// dependabot does not find the versions in the gradle.properties, but it does here
 	val koinVersion = "2.2.2"
 	val junitVersion = "5.8.2"
-	val jsonwebtokenVersion = "0.11.3"
-	val ktorVersion = "1.6.8"
-	val kotlinVersion = "1.6.0"
+	val jsonwebtokenVersion = "0.11.5"
+	val ktorVersion = "2.0.2"
+	val kotlinVersion = "1.6.1"
 
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:$kotlinVersion")
-	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
+	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
 
-	implementation("com.charleskorn.kaml:kaml-jvm:0.43.0")
+	implementation("com.charleskorn.kaml:kaml-jvm:0.44.0")
 
 	implementation("io.jsonwebtoken:jjwt-api:$jsonwebtokenVersion")
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:$jsonwebtokenVersion")
@@ -42,10 +42,12 @@ dependencies {
 	implementation("io.ktor:ktor-client-core:$ktorVersion")
 	implementation("io.ktor:ktor-client-cio:$ktorVersion")
 	implementation("io.ktor:ktor-client-serialization:$ktorVersion")
+	implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+	implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
 	implementation("org.koin:koin-core:$koinVersion")
 
-	implementation("com.github.kotlin-telegram-bot:kotlin-telegram-bot:6.0.6") {
+	implementation("com.github.kotlin-telegram-bot:kotlin-telegram-bot:6.0.7") {
 		exclude(module = "webhook")
 		exclude(module = "echo")
 		exclude(module = "dispatcher")

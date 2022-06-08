@@ -10,8 +10,8 @@ import de.lehrbaum.bot.translate.service.translation.YandexTranslationService
 import de.lehrbaum.bot.translate.telegram.TelegramBotFactory
 import de.lehrbaum.bot.translate.telegram.TranslateBotLogic
 import io.ktor.client.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.serialization.kotlinx.json.*
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import java.io.File
@@ -35,8 +35,8 @@ private val applicationModule = module {
 
 private fun setupKtorHttpClient(): HttpClient {
 	return HttpClient {
-		install(JsonFeature) {
-			serializer = KotlinxSerializer()
+		install(ContentNegotiation) {
+			json()
 		}
 	}
 }

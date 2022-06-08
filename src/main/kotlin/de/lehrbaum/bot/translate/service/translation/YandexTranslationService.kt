@@ -1,6 +1,7 @@
 package de.lehrbaum.bot.translate.service.translation
 
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.serialization.Serializable
@@ -16,8 +17,8 @@ class YandexTranslationService(private val httpClient: HttpClient, private val y
 			url("https://translate.api.cloud.yandex.net/translate/v2/detect")
 			header(HttpHeaders.Authorization, "Bearer $iamToken")
 			contentType(ContentType.Application.Json)
-			body = DetectLanguageRequest(text, suggestions)
-		}
+			setBody(DetectLanguageRequest(text, suggestions))
+		}.body()
 		return response.languageCode
 	}
 
@@ -27,7 +28,7 @@ class YandexTranslationService(private val httpClient: HttpClient, private val y
 		val response: GetLanguagesResponse = httpClient.post {
 			url("https://translate.api.cloud.yandex.net/translate/v2/languages")
 			header(HttpHeaders.Authorization, "Bearer $iamToken")
-		}
+		}.body()
 
 		return response.languages.filter {
 			it.name != null
@@ -38,14 +39,14 @@ class YandexTranslationService(private val httpClient: HttpClient, private val y
 
 	override suspend fun translate(text: String, sourceLang: String, targetLang: String): String {
 		val iamToken = yandexTokenService.requestIAMToken()
-		val body = TranslateTextRequest(sourceLang, targetLang, listOf(text))
+		val requestBody = TranslateTextRequest(sourceLang, targetLang, listOf(text))
 
 		val response: TranslateTextResponse = httpClient.post {
 			url("https://translate.api.cloud.yandex.net/translate/v2/translate")
 			header(HttpHeaders.Authorization, "Bearer $iamToken")
 			contentType(ContentType.Application.Json)
-			this.body = body
-		}
+			setBody(requestBody)
+		}.body()
 		return response.translations.first().text
 	}
 }

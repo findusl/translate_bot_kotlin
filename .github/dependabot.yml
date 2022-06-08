@@ -15,3 +15,4 @@ updates:
       - "findusl"
     reviewers:
       - "findusl"
+    open-pull-requests-limit: 2

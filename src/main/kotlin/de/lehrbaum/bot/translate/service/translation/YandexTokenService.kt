@@ -5,6 +5,7 @@ import de.lehrbaum.bot.translate.extensions.generateLogger
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.ktor.client.*
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.http.ContentType.*
@@ -33,8 +34,8 @@ class YandexTokenService(private val httpClient: HttpClient, private val secrets
 		val response: BearerTokenResponse = httpClient.post {
 			url("https://iam.api.cloud.yandex.net/iam/v1/tokens")
 			contentType(Application.Json)
-			body = BearerTokenRequest(jwt)
-		}
+			setBody(BearerTokenRequest(jwt))
+		}.body()
 		logger.info { "Got iamToken ${response.iamToken}" }
 		return response.iamToken
 	}
