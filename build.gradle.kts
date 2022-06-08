@@ -24,7 +24,7 @@ dependencies {
 	// dependabot does not find the versions in the gradle.properties, but it does here
 	val koinVersion = "2.2.2"
 	val junitVersion = "5.8.2"
-	val jsonwebtokenVersion = "0.11.2"
+	val jsonwebtokenVersion = "0.11.3"
 	val ktorVersion = "1.6.8"
 	val kotlinVersion = "1.6.0"
 
@@ -45,7 +45,7 @@ dependencies {
 
 	implementation("org.koin:koin-core:$koinVersion")
 
-	implementation("com.github.kotlin-telegram-bot:kotlin-telegram-bot:6.0.6") {
+	implementation("com.github.kotlin-telegram-bot:kotlin-telegram-bot:6.0.7") {
 		exclude(module = "webhook")
 		exclude(module = "echo")
 		exclude(module = "dispatcher")
