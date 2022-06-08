@@ -102,6 +102,7 @@ val jarWithDependencies by tasks.creating(Jar::class) {
 }
 
 tasks.withType<Jar> {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 	// TODO consider excluding the template resource file.
 	manifest {
 		attributes["Main-Class"] = "de.lehrbaum.bot.translate.MainKt"
@@ -111,6 +112,14 @@ tasks.withType<Jar> {
 			exclude("META-INF/*.RSA", "META-INF/*.SF", "META-INF/*.DSA")
 		}
 	}
+}
+
+tasks.withType<Tar> {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+tasks.withType<Zip> {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 tasks.withType<Test> {
