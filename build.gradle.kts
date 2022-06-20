@@ -26,7 +26,7 @@ dependencies {
 	val junitVersion = "5.8.2"
 	val jsonwebtokenVersion = "0.11.5"
 	val ktorVersion = "2.0.2"
-	val kotlinVersion = "1.6.2"
+	val kotlinVersion = "1.6.3"
 
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:$kotlinVersion")
 	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
