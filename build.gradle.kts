@@ -23,13 +23,13 @@ repositories {
 dependencies {
 	// dependabot does not find the versions in the gradle.properties, but it does here
 	val koinVersion = "2.2.2"
-	val junitVersion = "5.8.2"
+	val junitVersion = "5.9.0"
 	val jsonwebtokenVersion = "0.11.5"
 	val ktorVersion = "2.0.2"
 	val kotlinVersion = "1.6.4"
 
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:$kotlinVersion")
-	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
+	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
 
 	implementation("com.charleskorn.kaml:kaml-jvm:0.47.0")
 
