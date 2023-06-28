@@ -1,10 +1,14 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
+import java.util.*
+
 
 plugins {
 	application
 	idea
-	kotlin("jvm") version "1.7.0"
-	kotlin("plugin.serialization") version "1.7.0"
+	kotlin("jvm") version "1.8.22"
+	kotlin("plugin.serialization") version "1.8.22"
+	id("com.github.ben-manes.versions") version "0.47.0"
 }
 
 group = "de.lehrbaum"
@@ -16,22 +20,21 @@ application {
 
 repositories {
 	mavenCentral()
-	jcenter()
 	maven(url = "https://jitpack.io")
 }
 
 dependencies {
 	// dependabot does not find the versions in the gradle.properties, but it does here
-	val koinVersion = "2.2.2"
-	val junitVersion = "5.8.2"
+	val koinVersion = "3.4.1"
+	val junitVersion = "5.9.3"
 	val jsonwebtokenVersion = "0.11.5"
-	val ktorVersion = "2.0.2"
-	val kotlinVersion = "1.6.4"
+	val ktorVersion = "2.3.2"
+	val kotlinVersion = "1.7.1"
 
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:$kotlinVersion")
-	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
+	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
 
-	implementation("com.charleskorn.kaml:kaml-jvm:0.47.0")
+	implementation("com.charleskorn.kaml:kaml-jvm:0.54.0")
 
 	implementation("io.jsonwebtoken:jjwt-api:$jsonwebtokenVersion")
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:$jsonwebtokenVersion")
@@ -45,9 +48,9 @@ dependencies {
 	implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
 	implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 
-	implementation("org.koin:koin-core:$koinVersion")
+	implementation("io.insert-koin:koin-core:$koinVersion")
 
-	implementation("com.github.kotlin-telegram-bot:kotlin-telegram-bot:6.0.7") {
+	implementation("com.github.kotlin-telegram-bot:kotlin-telegram-bot:6.1.0") {
 		exclude(module = "webhook")
 		exclude(module = "echo")
 		exclude(module = "dispatcher")
@@ -57,7 +60,7 @@ dependencies {
 	// test implementations:
 	testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinVersion")
 
-	testImplementation("org.koin:koin-test:$koinVersion")
+	testImplementation("io.insert-koin:koin-test:$koinVersion")
 
 	testImplementation("com.natpryce:hamkrest:1.8.0.1")
 
@@ -66,7 +69,7 @@ dependencies {
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 
 	testImplementation("io.ktor:ktor-client-logging:$ktorVersion")
-	testImplementation("ch.qos.logback:logback-classic:1.2.11")
+	testImplementation("ch.qos.logback:logback-classic:1.4.8")
 }
 
 java.targetCompatibility = JavaVersion.VERSION_15
@@ -129,3 +132,19 @@ tasks.withType<Test> {
 tasks.withType<KotlinCompile> {
 	kotlinOptions.jvmTarget = "11"
 }
+
+// https://github.com/ben-manes/gradle-versions-plugin
+tasks.withType<DependencyUpdatesTask> {
+	rejectVersionIf {
+		isNonStable(candidate.version) && !isNonStable(currentVersion)
+	}
+}
+
+fun isNonStable(version: String): Boolean {
+	val stableKeyword = listOf("RELEASE", "FINAL", "GA")
+		.any { version.uppercase(Locale.getDefault()).contains(it) }
+	val regex = "^[0-9,.v-]+(-r)?$".toRegex()
+	val isStable = stableKeyword || regex.matches(version)
+	return isStable.not()
+}
+
