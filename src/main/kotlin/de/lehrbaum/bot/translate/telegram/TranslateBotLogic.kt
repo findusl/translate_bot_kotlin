@@ -10,7 +10,7 @@ import de.lehrbaum.bot.translate.extensions.generateLogger
 import de.lehrbaum.bot.translate.extensions.replyToMessage
 import de.lehrbaum.bot.translate.repository.ChatSettings
 import de.lehrbaum.bot.translate.repository.ChatSettingsRepository
-import de.lehrbaum.bot.translate.service.translation.TranslationService
+import de.lehrbaum.bot.translate.service.translation.CombinedTranslationService
 import de.lehrbaum.bot.translate.service.translation.YandexTokenService
 import de.lehrbaum.bot.translate.telegram.Commands.ADD_TRANSLATION_RULE
 import de.lehrbaum.bot.translate.telegram.Commands.ECHO
@@ -20,7 +20,6 @@ import de.lehrbaum.bot.translate.telegram.Commands.REMOVE_TRANSLATION_RULE
 import de.lehrbaum.bot.translate.telegram.Commands.START_TRANSLATING
 import de.lehrbaum.bot.translate.telegram.Commands.STOP_TRANSLATING
 import de.lehrbaum.bot.translate.telegram.Commands.TRANSLATE
-import java.util.logging.Level
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,7 +28,7 @@ private val logger = generateLogger<YandexTokenService>()
 
 class TranslateBotLogic(
 	telegramBotFactory: TelegramBotFactory,
-	private val translationService: TranslationService,
+	private val translationService: CombinedTranslationService,
 	private val chatSettingsRepository: ChatSettingsRepository
 ) {
 

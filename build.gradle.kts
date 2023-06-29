@@ -1,5 +1,5 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.util.*
 
 
@@ -29,9 +29,8 @@ dependencies {
 	val junitVersion = "5.9.3"
 	val jsonwebtokenVersion = "0.11.5"
 	val ktorVersion = "2.3.2"
-	val kotlinVersion = "1.7.1"
 
-	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:$kotlinVersion")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.7.1")
 	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
 
 	implementation("com.charleskorn.kaml:kaml-jvm:0.54.0")
@@ -58,13 +57,12 @@ dependencies {
 	}
 
 	// test implementations:
-	testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinVersion")
+	testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
 
-	testImplementation("io.insert-koin:koin-test:$koinVersion")
+	testImplementation("io.insert-koin:koin-test-junit5:$koinVersion")
 
 	testImplementation("com.natpryce:hamkrest:1.8.0.1")
 
-	testImplementation(kotlin("test-junit5"))
 	testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 
@@ -72,7 +70,7 @@ dependencies {
 	testImplementation("ch.qos.logback:logback-classic:1.4.8")
 }
 
-java.targetCompatibility = JavaVersion.VERSION_15
+java.targetCompatibility = JavaVersion.VERSION_17
 
 val main: SourceSet by sourceSets.named("main")
 
@@ -130,7 +128,7 @@ tasks.withType<Test> {
 }
 
 tasks.withType<KotlinCompile> {
-	kotlinOptions.jvmTarget = "11"
+	kotlinOptions.jvmTarget = "17"
 }
 
 // https://github.com/ben-manes/gradle-versions-plugin
