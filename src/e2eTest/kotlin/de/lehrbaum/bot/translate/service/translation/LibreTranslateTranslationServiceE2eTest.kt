@@ -11,8 +11,7 @@ import org.koin.test.inject
 import org.koin.test.junit5.KoinTestExtension
 import kotlinx.coroutines.runBlocking
 
-@Disabled("Currently no access to the API")
-class YandexTranslationServiceE2eTest : KoinTest {
+class LibreTranslateTranslationServiceE2eTest : KoinTest {
 
 	@JvmField
 	@RegisterExtension
@@ -20,7 +19,7 @@ class YandexTranslationServiceE2eTest : KoinTest {
 		modules(KoinModules.configModule, KoinModules.applicationModule, KoinModules.repositoryModule)
 	}
 
-	private val sut: YandexTranslationService by inject()
+	private val sut: LibreTranslateTranslationService by inject()
 
 	@Test
 	fun `Get languages should return a non empty list of languages`(): Unit = runBlocking {
@@ -41,12 +40,14 @@ class YandexTranslationServiceE2eTest : KoinTest {
 	}
 
 	@Test
+	@Disabled("Not yet implemented")
 	fun `Detect language with language suggestion should consider the suggestion`(): Unit = runBlocking {
-		val language = sut.detectLanguage("Blitzkrieg", setOf("en"))
+		val language = sut.detectLanguage("Blitzkrieg ist gut", setOf("en"))
 		assertThat(language, equalTo("en"))
 	}
 
 	@Test
+	@Disabled("Not yet implemented")
 	fun `Translate language should translate simple text`(): Unit = runBlocking {
 		val language = sut.translate("Hello", "en", "de")
 		assertThat(language, equalTo("Hallo"))

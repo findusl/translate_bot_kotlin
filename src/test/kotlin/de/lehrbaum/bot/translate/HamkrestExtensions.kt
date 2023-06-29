@@ -1,7 +1,6 @@
 package de.lehrbaum.bot.translate
 
 import com.natpryce.hamkrest.*
-import org.hamcrest.CoreMatchers
 
 val mapIsEmpty: Matcher<Map<*, *>> = has(Map<*, *>::size, equalTo(0))
 
