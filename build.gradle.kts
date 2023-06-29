@@ -12,7 +12,7 @@ plugins {
 }
 
 group = "de.lehrbaum"
-version = "1.1-SNAPSHOT"
+version = "1.2-SNAPSHOT"
 
 application {
 	mainClass.set("de.lehrbaum.bot.translate.MainKt")
@@ -115,16 +115,22 @@ tasks.withType<Jar> {
 	}
 }
 
-tasks.withType<Tar> {
-	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-
-tasks.withType<Zip> {
-	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+tasks.named<Sync>("installDist") {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+// this only really works locally for now because of the target platform
+tasks.register("dockerImage", Exec::class) {
+	group = "distribution"
+	dependsOn("installDist")
+	commandLine("docker", "build", "-t", "translate_bot_kotlin", ".")
+	doLast {
+		commandLine("docker", "save", "-o", "$buildDir/translate_bot_kotlin.tar", "translate_bot_kotlin")
+	}
 }
 
 tasks.withType<KotlinCompile> {

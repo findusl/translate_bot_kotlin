@@ -14,7 +14,7 @@ fun main(args: Array<String>) {
 	}
 	setupLogger()
 	setupKoin()
-	println("Hello world")
+	println("Hello world. Path $BASE_PATH")
 	MainApplication().runBot()
 }
 
