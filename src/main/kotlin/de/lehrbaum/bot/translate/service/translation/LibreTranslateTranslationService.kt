@@ -17,7 +17,7 @@ class LibreTranslateTranslationService(
 			setBody(listOf("q" to text).formUrlEncode())
 		}.body()
 
-		return response.firstOrNull()?.language
+		return response.firstOrNull { it.confidence > 50.0 || (it.language in suggestions && it.confidence > 30.0) }?.language
 	}
 
 	@Serializable
