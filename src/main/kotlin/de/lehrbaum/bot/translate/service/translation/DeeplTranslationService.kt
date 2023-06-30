@@ -30,7 +30,7 @@ class DeeplTranslationService(
 					"text" to text,
 					"source_lang" to sourceLang,
 					"target_lang" to targetLang,
-					"formality" to "prefer_more",
+					"formality" to "prefer_less",
 				).formUrlEncode()
 			)
 		}
