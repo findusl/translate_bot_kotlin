@@ -1,9 +1,13 @@
 package de.lehrbaum.bot.translate.telegram
 
+import com.github.kotlintelegrambot.bot
+import com.github.kotlintelegrambot.dispatch
 import com.github.kotlintelegrambot.dispatcher.handlers.CommandHandlerEnvironment
 import com.github.kotlintelegrambot.dispatcher.handlers.TextHandlerEnvironment
 import com.github.kotlintelegrambot.dispatcher.text
 import com.github.kotlintelegrambot.entities.BotCommand
+import com.github.kotlintelegrambot.logging.LogLevel
+import de.lehrbaum.bot.translate.config.Secrets
 import de.lehrbaum.bot.translate.extensions.consumeCommand
 import de.lehrbaum.bot.translate.extensions.exitIfNull
 import de.lehrbaum.bot.translate.extensions.generateLogger
@@ -27,23 +31,27 @@ import kotlinx.coroutines.launch
 private val logger = generateLogger<YandexTokenService>()
 
 class TranslateBotLogic(
-	telegramBotFactory: TelegramBotFactory,
+	secrets: Secrets,
 	private val translationService: CombinedTranslationService,
 	private val chatSettingsRepository: ChatSettingsRepository
 ) {
 
 	private val translateBotScope = CoroutineScope(Dispatchers.IO)
 
-	private val bot = telegramBotFactory.generateBot {
-		consumeCommand(ECHO.command) { handleEchoCommand() }
-		consumeCommand(GET_LANGUAGES.command, translateBotScope) { handleGetLanguagesCommand() }
-		consumeCommand(START_TRANSLATING.command, translateBotScope) { handleStartTranslatingCommand() }
-		consumeCommand(STOP_TRANSLATING.command, translateBotScope) { handleStopTranslatingCommand() }
-		consumeCommand(ADD_TRANSLATION_RULE.command, translateBotScope) { handleAddTranslationRuleCommand() }
-		consumeCommand(REMOVE_TRANSLATION_RULE.command, translateBotScope) { handleRemoveTranslationRuleCommand() }
-		consumeCommand(HELP.command, translateBotScope) { handleHelpCommand() }
-		consumeCommand(TRANSLATE.command, translateBotScope) { handleTranslateCommand() }
-		text { translateBotScope.launch { handleTextMessage() } }
+	private val bot = bot {
+		logLevel = LogLevel.Error
+		token = secrets.telegram.accessToken
+		dispatch {
+			consumeCommand(ECHO.command) { handleEchoCommand() }
+			consumeCommand(GET_LANGUAGES.command, translateBotScope) { handleGetLanguagesCommand() }
+			consumeCommand(START_TRANSLATING.command, translateBotScope) { handleStartTranslatingCommand() }
+			consumeCommand(STOP_TRANSLATING.command, translateBotScope) { handleStopTranslatingCommand() }
+			consumeCommand(ADD_TRANSLATION_RULE.command, translateBotScope) { handleAddTranslationRuleCommand() }
+			consumeCommand(REMOVE_TRANSLATION_RULE.command, translateBotScope) { handleRemoveTranslationRuleCommand() }
+			consumeCommand(HELP.command, translateBotScope) { handleHelpCommand() }
+			consumeCommand(TRANSLATE.command, translateBotScope) { handleTranslateCommand() }
+			text { translateBotScope.launch { handleTextMessage() } }
+		}
 	}
 
 	fun startLogic() {
@@ -68,7 +76,7 @@ class TranslateBotLogic(
 		if (chatSettings.translationRules.isEmpty()) {
 			replyToMessage(
 				"There are no active translation rules. Translating not activated. " +
-						"Use ${ADD_TRANSLATION_RULE.command} to add translation rules."
+					"Use ${ADD_TRANSLATION_RULE.command} to add translation rules."
 			)
 			return
 		}
@@ -86,7 +94,7 @@ class TranslateBotLogic(
 		} else {
 			replyToMessage(
 				"No more messages in this chat are automatically translated. " +
-						"Translation for this chat was never active."
+					"Translation for this chat was never active."
 			)
 		}
 	}
@@ -97,6 +105,7 @@ class TranslateBotLogic(
 				replyToMessage("Incorrect parameter.\n" + ADD_TRANSLATION_RULE.description)
 				return
 			}
+
 			2 -> Pair(args[0], args[1])
 			else -> {
 				replyToMessage("Incorrect count of parameters.\n" + ADD_TRANSLATION_RULE.description)
@@ -113,8 +122,8 @@ class TranslateBotLogic(
 		if (chatSettings.translationRules.containsKey(source)) {
 			replyToMessage(
 				"There is already a translation rule for $source to ${chatSettings.translationRules[source]}. " +
-						"There can only be one rule for a given source language. " +
-						"You can delete the existing rule with /${REMOVE_TRANSLATION_RULE.command} $source"
+					"There can only be one rule for a given source language. " +
+					"You can delete the existing rule with /${REMOVE_TRANSLATION_RULE.command} $source"
 			)
 			return
 		}

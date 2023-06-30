@@ -10,7 +10,6 @@ import de.lehrbaum.bot.translate.repository.ChatSettingsRepositoryImpl
 import de.lehrbaum.bot.translate.service.translation.CombinedTranslationService
 import de.lehrbaum.bot.translate.service.translation.DeeplTranslationService
 import de.lehrbaum.bot.translate.service.translation.LibreTranslateTranslationService
-import de.lehrbaum.bot.translate.telegram.TelegramBotFactory
 import de.lehrbaum.bot.translate.telegram.TranslateBotLogic
 import io.ktor.client.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -35,7 +34,6 @@ object KoinModules {
 		single { DeeplTranslationService(get(), get()) }
 		single { LibreTranslateTranslationService(get(), get()) }
 		single { setupKtorHttpClient() }
-		single { TelegramBotFactory(get()) }
 	}
 
 	private fun setupKtorHttpClient(): HttpClient {
